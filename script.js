@@ -1,20 +1,77 @@
-let screen = document.getElementById("screen");
-let paren1 = document.getElementById("paren1");
-let paren2 = document.getElementById("paren2");
-let porcen = document.getElementById("porcen");
-let CE = document.getElementById("CE");
-let sete = document.getElementById("sete");
-let oito = document.getElementById("oito");
-let nove = document.getElementById("nove");
-let pontos = document.getElementById("pontos");
-let quatro = document.getElementById("quatro");
-let cinco = document.getElementById("cinco");
-let seis = document.getElementById("seis");
-let xis = document.getElementById("xis");
-let um = document.getElementById("um");
-let dois = document.getElementById("tres");
-let traco = document.getElementById("traco");
-let zero = document.getElementById("zero");
-let ponto = document.getElementById("ponto");
-let igual = document.getElementById("igual");
-let mais = document.getElementById("mais");
+const screen = document.getElementById('screen');
+const numbers = document.getElementsByClassName('number');
+const operators = document.getElementsByClassName('operador');
+const equal = document.getElementById('equal');
+const clear = document.getElementById('clear');
+
+let currentNumber = '';
+let previousNumber = null;
+let currentOperator = null;
+
+
+Array.from(numbers).forEach(numberButton => {
+  numberButton.addEventListener('click', () => {
+    currentNumber += numberButton.value;
+    screen.innerText = currentNumber;
+  });
+});
+
+
+Array.from(operators).forEach(operatorButton => {
+  operatorButton.addEventListener('click', () => {
+    if (currentOperator !== null && currentNumber !== '') {
+      calculate();
+    }
+    currentOperator = operatorButton.value;
+    previousNumber = parseFloat(currentNumber);
+    currentNumber = '';
+  });
+});
+
+
+equal.addEventListener('click', () => {
+  calculate();
+});
+
+
+clear.addEventListener('click', () => {
+  clearCalculator();
+});
+
+
+function calculate() {
+  if (previousNumber !== null && currentOperator !== null && currentNumber !== '') {
+    const num1 = previousNumber;
+    const num2 = parseFloat(currentNumber);
+    let result;
+
+    switch (currentOperator) {
+      case '+':
+        result = num1 + num2;
+        break;
+      case '-':
+        result = num1 - num2;
+        break;
+      case 'X':
+        result = num1 * num2;
+        break;
+      case ':':
+        result = num1 / num2;
+        break;
+      default:
+        result = NaN;
+    }
+
+    screen.innerText = result;
+    currentNumber = result.toString();
+    previousNumber = null;
+    currentOperator = null;
+  }
+}
+
+function clearCalculator() {
+  currentNumber = '';
+  previousNumber = null;
+  currentOperator = null;
+  screen.innerText = '0';
+}
